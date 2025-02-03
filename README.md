@@ -40,6 +40,6 @@ YOLO를 활용한 평지 및 경사로에서의 실시간 유동 인구 감지�
 11. 깃허브 소스 코드 관리
 
 ## 참고자료
-https://kiss-kstudy-com.libproxy.ptu.ac.kr/Detail/Ar?key=4059409 // 보행자 깊이 정보를 이용한 군중 밀집도 추정 논문
+https://kiss-kstudy-com.libproxy.ptu.ac.kr/Detail/Ar?key=4059409 // 보행자 깊이 정보를 이용한 군중 밀집도 추정 논문 \n
 https://www-dbpia-co-kr.libproxy.ptu.ac.kr/journal/articleDetail?nodeId=NODE11917835 // 군중 밀집도 인식을 위한 알고리즘 비교 연구 논문
 
