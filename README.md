@@ -24,4 +24,4 @@ YOLO
 11. 깃허브 소스 코드 관리
 
 ## 참고자료
-https://kiss-kstudy-com.libproxy.ptu.ac.kr/Detail/Ar?key=4059409
+https://kiss-kstudy-com.libproxy.ptu.ac.kr/Detail/Ar?key=4059409 // 보행자 깊이 정보를 이용한 군중 밀집도 추정
