@@ -24,3 +24,4 @@ YOLO
 11. 깃허브 소스 코드 관리
 
 adsfsadf
+https://kiss-kstudy-com.libproxy.ptu.ac.kr/Detail/Ar?key=4059409
