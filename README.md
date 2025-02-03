@@ -28,6 +28,8 @@ YOLO를 활용한 평지 및 경사로에서의 실시간 유동 인구 감지�
 ```
 ## 예상 목차
 1. 데이터 수집
+<img width="563" alt="Dublin, Ireland" src="https://github.com/user-attachments/assets/06494445-6a93-44d2-9043-cfbc5b9d62b7" />
+<img width="386" alt="Dublin, Ireland 면적" src="https://github.com/user-attachments/assets/25a3893b-c526-4221-ada9-338b6523515b" />
 
 
 2. 데이터 라벨링
