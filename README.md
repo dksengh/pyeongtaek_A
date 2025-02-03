@@ -10,7 +10,7 @@ YOLO를 활용한 평지 및 경사로에서의 실시간 유동 인구 감지�
 ```
 YOLO
 ```
-##
+## 예상 목차
 1. 데이터 수집
 2. 데이터 라벨링
 3. 데이터 전처리
@@ -23,5 +23,5 @@ YOLO
 10. ppt자료 준비
 11. 깃허브 소스 코드 관리
 
-
+## 참고자료
 https://kiss-kstudy-com.libproxy.ptu.ac.kr/Detail/Ar?key=4059409
