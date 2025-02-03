@@ -43,5 +43,6 @@ YOLO를 활용한 평지 및 경사로에서의 실시간 유동 인구 감지�
 ```
 https://kiss-kstudy-com.libproxy.ptu.ac.kr/Detail/Ar?key=4059409 // 보행자 깊이 정보를 이용한 군중 밀집도 추정 논문
 https://www-dbpia-co-kr.libproxy.ptu.ac.kr/journal/articleDetail?nodeId=NODE11917835 // 군중 밀집도 인식을 위한 알고리즘 비교 연구 논문
+https://www-dbpia-co-kr.libproxy.ptu.ac.kr/journal/articleDetail?nodeId=NODE12014061 // 도심 군중밀집 안전을 위한 인공지능 기반의 영상분석 시스템 개발 논문
 ```
 
