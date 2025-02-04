@@ -62,14 +62,14 @@ person_count = len(person_boxes)
 if angle < 34.99:
     if person_count <= width:
         status = "\033[92m안전\033[0m"  # 초록색
-    elif person_count <= width*1.5:
+    elif person_count > width and person_count <= width*1.5:
         status = "\033[93m보통\033[0m"  # 노란색
     else:
         status = "\033[91m위험\033[0m"  # 빨간색
 else:
     if person_count <= width*0.7/math.tan(angle):
         status = "\033[92m안전\033[0m"  # 초록색
-    elif person_count <= width*1.5*0.7/math.tan(angle):
+    elif person_count >= width*0.7/math.tan(angle) and person_count <= width*1.5*0.7/math.tan(angle):
         status = "\033[93m보통\033[0m"  # 노란색
     else:
         status = "\033[91m위험\033[0m"  # 빨간색
