@@ -1,6 +1,7 @@
 import cv2
 import os
 import tkinter as tk
+import math
 from tkinter import simpledialog
 from ultralytics import YOLO, solutions
 
@@ -37,57 +38,82 @@ get_inputs()
 # 입력값 출력
 print(f"입력된 값 - 넓이: {width}, 기울기: {angle}")
 
-# 이미지 파일 경로 설정
-image_path = './project/Dublin, Ireland.png'
+# 분석할 영상 파일 설정
+video_path = os.path.expanduser("./project/EarthCam Live- Dublin, Ireland_test.mp4")
 
-# 모델 예측 수행
-results = model(image_path)
+# 전체 영상을 분석하도록 수정
+def process_video(video_path):
+    cap = cv2.VideoCapture(video_path)
+    
+    if not cap.isOpened():
+        print("비디오 파일을 열 수 없습니다. 경로를 확인하세요.")
+        return
+    
+    while cap.isOpened():
+        ret, frame = cap.read()
+        if not ret:
+            break
+        
+        # 모델 예측 수행
+        results = model(frame)
+        
+        def filter_person(results):
+            """ person (class 0)만 필터링 """
+            person = []
+            for result in results:
+                for box in result.boxes:
+                    if int(box.cls) == 0:  # class 0: person
+                        person.append(box.xyxy.tolist()[0])
+            return person
+        
+        # person만 추출
+        person_boxes = filter_person(results)
+        
+        # 감지된 person 객체 수
+        person_count = len(person_boxes)
+        
+        # 안전 상태 결정
+        if angle < 34.99:
+            if person_count <= width:
+                status = "안전"
+                color = (0, 255, 0)  # 초록색
+            elif person_count > width and person_count <= width*1.5:
+                status = "보통"
+                color = (0, 255, 255)  # 노란색
+            else:
+                status = "위험"
+                color = (0, 0, 255)  # 빨간색
+        else:
+            if person_count <= width*0.7/math.tan(angle):
+                status = "안전"
+                color = (0, 255, 0)  # 초록색
+            elif person_count >= width*0.7/math.tan(angle) and person_count <= width*1.5*0.7/math.tan(angle):
+                status = "보통"
+                color = (0, 255, 255)  # 노란색
+            else:
+                status = "위험"
+                color = (0, 0, 255)  # 빨간색
+        
+        print(f"현재 상태: {status} (감지된 사람 수: {person_count})")
+        
+        # 결과 영상 출력
+        frame = results[0].plot()
+        
+        # 텍스트 추가 (한글 표시 문제 해결을 위해 폰트 변경)
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        cv2.putText(frame, f"상태: {status}", (50, 50), font, 1, color, 2, cv2.LINE_AA)
+        cv2.putText(frame, f"감지된 사람 수: {person_count}", (50, 100), font, 1, (255, 255, 255), 2, cv2.LINE_AA)
+        
+        # 영상 크기 조절
+        frame = cv2.resize(frame, (800, 600))
+        
+        cv2.imshow("YOLO Detection", frame)
+        
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    
+    cap.release()
+    cv2.destroyAllWindows()
 
-def filter_person(results):
-    """ person (class 0)만 필터링 """
-    person = []
-    for result in results:
-        for box in result.boxes:
-            if int(box.cls) == 0:  # class 0: person
-                person.append(box.xyxy.tolist()[0])
-    return person
-
-# person만 추출
-person_boxes = filter_person(results)
-
-# 감지된 person 객체 수
-person_count = len(person_boxes)
-
-# 안전 상태 결정
-if angle < 34.99:
-    if person_count <= width:
-        status = "\033[92m안전\033[0m"  # 초록색
-    elif person_count > width and person_count <= width*1.5:
-        status = "\033[93m보통\033[0m"  # 노란색
-    else:
-        status = "\033[91m위험\033[0m"  # 빨간색
-else:
-    if person_count <= width*0.7/math.tan(angle):
-        status = "\033[92m안전\033[0m"  # 초록색
-    elif person_count >= width*0.7/math.tan(angle) and person_count <= width*1.5*0.7/math.tan(angle):
-        status = "\033[93m보통\033[0m"  # 노란색
-    else:
-        status = "\033[91m위험\033[0m"  # 빨간색
-
-print(f"현재 상태: {status} (감지된 사람 수: {person_count})")
-
-# 좌표 설정
-region_points = {
-    "region-01": [(764, 364), (816, 416), (516, 464), (778, 622), (100, 361), (140, 270), (260, 261), (376, 394)]
-}
-
-# 구역 설정
-region = solutions.RegionCounter(
-    show=True,
-    region=region_points,
-    model="./yolov8x.pt"
-)
-
-# 결과 이미지 저장
-image = results[0].plot()
-cv2.imwrite("project/result_obb2.jpg", image)
+# 전체 영상 분석 실행
+process_video(video_path)
