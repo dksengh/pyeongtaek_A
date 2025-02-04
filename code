@@ -2,8 +2,14 @@ import cv2
 import os
 import tkinter as tk
 import math
+import numpy as np
 from tkinter import simpledialog
 from ultralytics import YOLO, solutions
+
+# 한글 폰트 설정 (Windows의 경우 'malgun.ttf', Mac의 경우 'AppleGothic', Linux의 경우 'NanumGothic')
+from PIL import ImageFont, ImageDraw, Image
+font_path = "malgun.ttf"  # 시스템 환경에 맞게 변경
+font = ImageFont.truetype(font_path, 30)
 
 # YOLO 모델 로드
 model = YOLO("yolov8x.pt")
@@ -99,10 +105,14 @@ def process_video(video_path):
         # 결과 영상 출력
         frame = results[0].plot()
         
-        # 텍스트 추가 (한글 표시 문제 해결을 위해 폰트 변경)
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        cv2.putText(frame, f"상태: {status}", (50, 50), font, 1, color, 2, cv2.LINE_AA)
-        cv2.putText(frame, f"감지된 사람 수: {person_count}", (50, 100), font, 1, (255, 255, 255), 2, cv2.LINE_AA)
+        # OpenCV 프레임을 PIL 이미지로 변환하여 한글 표시
+        frame_pil = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+        draw = ImageDraw.Draw(frame_pil)
+        draw.text((50, 50), f"{status}", font=font, fill=(0, 255, 0) if status == "안전" else (0, 255, 255) if status == "보통" else (255, 0, 0))
+        draw.text((50, 100), f"감지된 사람 수: {person_count}", font=font, fill=(255, 255, 255))
+        
+        # 다시 OpenCV 형식으로 변환
+        frame = cv2.cvtColor(np.array(frame_pil), cv2.COLOR_RGB2BGR)
         
         # 영상 크기 조절
         frame = cv2.resize(frame, (800, 600))
