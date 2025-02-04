@@ -78,6 +78,7 @@ detections = [
 tracks = tracker.update(detections)
 
 # 출력된 추적 결과
+https://drive.google.com/drive/folders/1O9VNYJGcSItNEewLlcGSf3v71nDdDE4_?usp=drive_link
 for track in tracks:
     track_id, x1, y1, x2, y2 = track[:5]
     print(f"ID {track_id}: 위치 ({x1}, {y1}) - ({x2}, {y2})")
