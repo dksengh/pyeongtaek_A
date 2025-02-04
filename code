@@ -20,7 +20,7 @@ def get_inputs():
     root.title("입력 창")
     root.geometry("300x150")
     
-    tk.Label(root, text="넓이:").grid(row=0, column=0)
+    tk.Label(root, text="넓이㎡:").grid(row=0, column=0)
     tk.Label(root, text="기울기:").grid(row=1, column=0)
     
     width_entry = tk.Entry(root)
@@ -81,13 +81,13 @@ def process_video(video_path):
         # 안전 상태 결정
         if angle < 34.99:
             if person_count <= width:
-                status = "안전"
+                status = "\033[92m안전\033[0m"
                 color = (0, 255, 0)  # 초록색
             elif person_count > width and person_count <= width*1.5:
-                status = "보통"
+                status = "\033[93m보통\033[0m"
                 color = (0, 255, 255)  # 노란색
             else:
-                status = "위험"
+                status = "\033[91m위험\033[0m"
                 color = (0, 0, 255)  # 빨간색
         else:
             if person_count <= width*0.7/math.tan(angle):
