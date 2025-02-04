@@ -1,4 +1,3 @@
-import math
 import cv2
 import os
 import tkinter as tk
@@ -9,13 +8,31 @@ from ultralytics import YOLO, solutions
 model = YOLO("yolov8x.pt")
 
 # GUI 창을 통해 사용자 입력 받기
-root = tk.Tk()
-root.withdraw()  # 기본 창 숨기기
-status = " "
-person_count = " "
+def get_inputs():
+    root = tk.Tk()
+    root.title("입력 창")
+    root.geometry("300x150")
+    
+    tk.Label(root, text="넓이:").grid(row=0, column=0)
+    tk.Label(root, text="기울기:").grid(row=1, column=0)
+    
+    width_entry = tk.Entry(root)
+    angle_entry = tk.Entry(root)
+    width_entry.grid(row=0, column=1)
+    angle_entry.grid(row=1, column=1)
+    
+    def submit():
+        global width, angle
+        width = float(width_entry.get())
+        angle = float(angle_entry.get())
+        root.destroy()
+    
+    tk.Button(root, text="확인", command=submit).grid(row=2, columnspan=2)
+    root.mainloop()
 
-width = simpledialog.askfloat("입력", "넓이를 입력하세요:")
-angle = simpledialog.askfloat("입력", "기울기를 입력하세요:")
+# 사용자 입력 받기
+width, angle = 0, 0
+get_inputs()
 
 # 입력값 출력
 print(f"입력된 값 - 넓이: {width}, 기울기: {angle}")
@@ -26,9 +43,20 @@ image_path = './project/Dublin, Ireland.png'
 # 모델 예측 수행
 results = model(image_path)
 
-# 3. person 클래스만 필터링하여 카운트
-detections = results[0].boxes  # 감지된 모든 객체의 바운딩 박스
-person_count = sum(1 for box in detections if box.cls == 0)  # "person" 클래스 ID는 일반적으로 0
+def filter_person(results):
+    """ person (class 0)만 필터링 """
+    person = []
+    for result in results:
+        for box in result.boxes:
+            if int(box.cls) == 0:  # class 0: person
+                person.append(box.xyxy.tolist()[0])
+    return person
+
+# person만 추출
+person_boxes = filter_person(results)
+
+# 감지된 person 객체 수
+person_count = len(person_boxes)
 
 # 안전 상태 결정
 if angle < 34.99:
