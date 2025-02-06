@@ -62,25 +62,3 @@ https://www-dbpia-co-kr.libproxy.ptu.ac.kr/journal/articleDetail?nodeId=NODE1191
 https://www-dbpia-co-kr.libproxy.ptu.ac.kr/journal/articleDetail?nodeId=NODE12014061 // 도심 군중밀집 안전을 위한 인공지능 기반의 영상분석 시스템 개발 논문
 ```
 
-
-## 코드
-
-from oc_sort.tracker import OCSort
-
-# OC-SORT 객체 생성
-tracker = OCSort(det_thresh=0.3, max_age=30, min_hits=3)
-
-# 예제: 객체 감지 결과를 바탕으로 추적
-detections = [
-    [100, 200, 150, 250, 0.9],  # (x1, y1, x2, y2, confidence)
-    [300, 400, 350, 450, 0.8]
-]
-
-# 추적 수행
-tracks = tracker.update(detections)
-
-# 출력된 추적 결과
-for track in tracks:
-    track_id, x1, y1, x2, y2 = track[:5]
-    print(f"ID {track_id}: 위치 ({x1}, {y1}) - ({x2}, {y2})")
-
